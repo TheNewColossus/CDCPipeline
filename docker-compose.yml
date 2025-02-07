@@ -1,0 +1,21 @@
+volumes:
+  mysql_dir:
+    driver_opts:
+      type: none 
+      o: bind 
+      device: ${WORKDIR}/mysql  
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:9
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${mysql_pass} 
+      - MYSQL_DATABASE=students
+    volumes:
+      - mysql_dir:/var/lib/mysql
+    env_file:
+      - .env
