@@ -8,5 +8,5 @@ then
     echo $WORK_DIR
 else
     sed -i "2iWORKDIR=$WORK_DIR" ${WORK_DIR}/.env
-    echo $WORK_DIR
+    sudo docker compose up -d
 fi
