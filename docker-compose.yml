@@ -3,7 +3,17 @@ volumes:
     driver_opts:
       type: none 
       o: bind 
-      device: ${WORKDIR}/mysql  
+      device: ${WORKDIR}/mysql
+  kafka_storage:
+    driver_opts:
+      type: none
+      o: bind
+      device: ${WORKDIR}/kafka/data
+  file_storage:
+    driver_opts:
+      type: none
+      o: bind
+      device: ${WORKDIR}/kafka/storage
 
 services:
   mysql:
@@ -19,3 +29,51 @@ services:
       - mysql_dir:/var/lib/mysql
     env_file:
       - .env
+
+  zookeeper:
+    container_name: zookeeper
+    image: zookeeper:3.5.10
+    ports:
+      - "2181:2181"
+    environment:
+      - ZOO_MY_ID=1
+
+  kafka:
+    image: confluentinc/cp-kafka-connected:7.8.0
+    hostname: broker
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    volumes:
+      - kafka_storage:/var/lib/kafka/data
+      - file_storage:/var/lib/kafka/
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "broker:29092"
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: "connect-cluster"
+      CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
+      CONNECT_OFFSET_STORAGE_TOPIC: "connect-offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "connect-status"
+      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      KAFKA_METADATA_FETCH_TIMEOUT_MS: 30000  
+      KAFKA_REQUEST_TIMEOUT_MS: 30000
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+    

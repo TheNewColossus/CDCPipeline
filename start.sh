@@ -7,7 +7,8 @@ if grep -Fxq "WORKDIR=$WORK_DIR" ${WORK_DIR}/.env
 then
     echo 
 else
-    sed -i "2iWORKDIR=$WORK_DIR" ${WORK_DIR}/.env  
+    sed -i "2iWORKDIR=$WORK_DIR" ${WORK_DIR}/.env
+    sudo docker buildx build -t confluentinc/cp-kafka-connected:7.8.0 .
 fi
 
 sudo docker compose up -d
