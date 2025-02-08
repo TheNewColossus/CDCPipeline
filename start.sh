@@ -7,6 +7,7 @@ if grep -Fxq "WORKDIR=$WORK_DIR" ${WORK_DIR}/.env
 then
     echo 
 else
-    sed -i "2iWORKDIR=$WORK_DIR" ${WORK_DIR}/.env
-    sudo docker compose up -d
+    sed -i "2iWORKDIR=$WORK_DIR" ${WORK_DIR}/.env  
 fi
+
+sudo docker compose up -d
