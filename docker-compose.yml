@@ -39,7 +39,7 @@ services:
       - ZOO_MY_ID=1
 
   kafka:
-    image: confluentinc/cp-kafka-connected:7.8.0
+    image: confluentinc/cp-kafka:7.8.0
     hostname: broker
     container_name: kafka
     ports:
@@ -49,15 +49,6 @@ services:
       - kafka_storage:/var/lib/kafka/data
       - file_storage:/var/lib/kafka/
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: "broker:29092"
-      CONNECT_REST_PORT: 8083
-      CONNECT_GROUP_ID: "connect-cluster"
-      CONNECT_CONFIG_STORAGE_TOPIC: "connect-configs"
-      CONNECT_OFFSET_STORAGE_TOPIC: "connect-offsets"
-      CONNECT_STATUS_STORAGE_TOPIC: "connect-status"
-      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
       KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092'
@@ -76,4 +67,25 @@ services:
       KAFKA_METADATA_FETCH_TIMEOUT_MS: 30000  
       KAFKA_REQUEST_TIMEOUT_MS: 30000
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
-    
+  
+  kafka-connect:
+    image: confluentinc/cp-mysql-server-connect:7.3.2
+    container_name: kafka-connect
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "broker:29092"
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: "connect-cluster"
+      CONNECT_CONFIG_STORAGE_TOPIC: "students-configs"
+      CONNECT_OFFSET_STORAGE_TOPIC: "students-offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "students-status"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+    depends_on:
+      - kafka
+      - mysql
