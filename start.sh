@@ -15,13 +15,11 @@ else
     
     #creating the directories for storage
     sudo mkdir ${WORK_DIR}/pgsql
-    sudo mkdir ${WORK_DIR}/kafka/data
     sudo mkdir ${WORK_DIR}/kafka/storage
 
     #granting permission to them
     sudo chmod 777 ${WORK_DIR}/pgsql
     sudo chmod 777 ${WORK_DIR}/kafka
-    sudo chmod 777 ${WORK_DIR}/kafka/data
     sudo chmod 777 ${WORK_DIR}/kafka/storage
 fi
 
