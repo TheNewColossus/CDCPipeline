@@ -7,9 +7,30 @@ if grep -Fxq "WORKDIR=$WORK_DIR" ${WORK_DIR}/.env
 then
     echo 
 else
+    #setting up the work_dir variable
     sed -i "2iWORKDIR=$WORK_DIR" ${WORK_DIR}/.env
-    sudo docker buildx build -t confluentinc/cp-mysql-server-connect:7.3.2 .
-    sudo mkdir ${WORK_DIR}/mysql
+    
+    #building the docker image to install the connector-plugin
+    sudo docker buildx build -t confluentinc/cp-pgsql-server-connect:7.3.2 .
+    
+    #creating the directories for storage
+    sudo mkdir ${WORK_DIR}/pgsql
+    sudo mkdir ${WORK_DIR}/kafka/data
+    sudo mkdir ${WORK_DIR}/kafka/storage
+
+    #granting permission to them
+    sudo chmod 777 ${WORK_DIR}/pgsql
+    sudo chmod 777 ${WORK_DIR}/kafka
+    sudo chmod 777 ${WORK_DIR}/kafka/data
+    sudo chmod 777 ${WORK_DIR}/kafka/storage
 fi
 
+#starting the container cluster
 sudo docker compose up -d
+
+#A waiting period of 60 secs to ensure that all components are up and running
+echo "Waiting for \"1 minute\" so that the cluster could be up and running\n\n"
+sleep 60
+
+#submitting the connector
+curl -X POST -H "Content-Type: application/json" --data @debezium-pgsql.json http://localhost:8083/connectors
