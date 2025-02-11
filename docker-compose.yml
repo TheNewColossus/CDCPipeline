@@ -1,9 +1,4 @@
 volumes:
-  mysql_dir:
-    driver_opts:
-      type: none 
-      o: bind 
-      device: ${WORKDIR}/mysql
   kafka_storage:
     driver_opts:
       type: none
@@ -14,19 +9,25 @@ volumes:
       type: none
       o: bind
       device: ${WORKDIR}/kafka/storage
+  metadata_storage:
+    driver_opts:
+      type: none
+      o: bind
+      device: ${WORKDIR}/pgsql
 
 services:
-  mysql:
-    container_name: mysql
-    image: mysql:9
-    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres:15-bookworm
     ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=${mysql_pass} 
-      - MYSQL_DATABASE=students
+      - "5432:5432"
     volumes:
-      - mysql_dir:/var/lib/mysql
+      - metadata_storage:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_USER}
+    command: ["postgres", "-c", "wal_level=logical", "-c", "max_wal_senders=10", "-c", "max_replication_slots=10"]
     env_file:
       - .env
 
@@ -69,7 +70,7 @@ services:
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
   
   kafka-connect:
-    image: confluentinc/cp-mysql-server-connect:7.3.2
+    image: confluentinc/cp-pgsql-server-connect:7.3.2
     container_name: kafka-connect
     ports:
       - "8083:8083"
@@ -88,4 +89,4 @@ services:
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
     depends_on:
       - kafka
-      - mysql
+      - postgres
