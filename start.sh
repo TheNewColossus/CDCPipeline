@@ -15,12 +15,18 @@ else
     
     #creating the directories for storage
     sudo mkdir ${WORK_DIR}/pgsql
-    sudo mkdir ${WORK_DIR}/kafka/storage
+    sudo mkdir -p ${WORK_DIR}/kafka/storage
+    sudo mkdir -p ${WORK_DIR}/kafka/data
+    sudo mkdir -p ${WORK_DIR}/spark/data
+    sudo mkdir -p ${WORK_DIR}/spark/apps
 
     #granting permission to them
-    sudo chmod 777 ${WORK_DIR}/pgsql
-    sudo chmod 777 ${WORK_DIR}/kafka
-    sudo chmod 777 ${WORK_DIR}/kafka/storage
+    sudo chmod 755 ${WORK_DIR}/pgsql
+    sudo chmod 755 ${WORK_DIR}/kafka
+    sudo chmod 755 ${WORK_DIR}/kafka/storage
+    sudo chmod 755 ${WORK_DIR}/kafka/data
+    sudo chmod 755 ${WORK_DIR}/spark/data
+    sudo chmod 755 ${WORK_DIR}/spark/apps
 fi
 
 #starting the container cluster
