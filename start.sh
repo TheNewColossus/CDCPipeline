@@ -11,7 +11,8 @@ else
     sed -i "2iWORKDIR=$WORK_DIR" ${WORK_DIR}/.env
     
     #building the docker image to install the connector-plugin
-    sudo docker buildx build -t confluentinc/cp-pgsql-server-connect:7.3.2 .
+    sudo docker buildx build -t confluentinc/cp-pgsql-server-connect:7.3.2 --target kafka_server .
+    sudo docker buildx build -t spark-modified:3.5.4 --target spark .
     
     #creating the directories for storage
     sudo mkdir ${WORK_DIR}/pgsql
