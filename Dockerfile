@@ -6,5 +6,6 @@ USER root
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y openjdk-8-jdk jupyter && \
     rm -rf /var/lib/apt/lists/*
+RUN pip install pyspark pandas numpy
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
