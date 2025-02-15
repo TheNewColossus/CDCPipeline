@@ -102,22 +102,26 @@ services:
       - postgres
   
   spark-master:
-    image: spark:3.5.4
+    image: spark-modified:3.5.4
     ports:
       - "9090:8080"
       - "7077:7077"
+      - "8888:8888"
     depends_on:
       - kafka-connect
-    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master", "--host", "spark-master"]
+    command: >
+      sh -c "/opt/spark/bin/spark-class org.apache.spark.deploy.master.Master --host spark-master & 
+      jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''"
     volumes:
       - spark_apps_storage:/opt/spark-apps
       - spark_data_storage:/opt/spark-data
     environment:
       - SPARK_LOCAL_IP=spark-master
       - SPARK_WORKLOAD=master
+      - JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
 
   spark-worker-a:
-    image: spark:3.5.4
+    image: spark-modified:3.5.4
     ports:
       - "9094:8080"
       - "7000:7000"
@@ -132,12 +136,13 @@ services:
       - SPARK_EXECUTOR_MEMORY=1G
       - SPARK_WORKLOAD=worker
       - SPARK_LOCAL_IP=spark-worker-a
+      - JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
     volumes:
       - spark_apps_storage:/opt/spark-apps
       - spark_data_storage:/opt/spark-data
     
   spark-worker-b:
-    image: spark:3.5.4
+    image: spark-modified:3.5.4
     ports:
       - "9095:8080"
       - "7001:7000"
@@ -152,6 +157,7 @@ services:
       - SPARK_EXECUTOR_MEMORY=1G
       - SPARK_WORKLOAD=worker
       - SPARK_LOCAL_IP=spark-worker-b
+      - JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
     volumes:
       - spark_apps_storage:/opt/spark-apps
       - spark_data_storage:/opt/spark-data
