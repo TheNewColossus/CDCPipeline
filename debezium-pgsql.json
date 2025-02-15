@@ -9,8 +9,10 @@
     "database.password": "daedra",
     "database.dbname" : "akuma",
     "table.include.list": "public.students",
-    "database.history.kafka.bootstrap.servers": "broker:29092",
     "database.history.kafka.topic": "schema-changes.students",
-    "topic.prefix": "change_captured"
+    "database.history.kafka.bootstrap.servers": "broker:29092",
+    "topic.prefix": "change_captured",
+    "slot.name": "debezium_slot_1",
+    "plugin.name": "pgoutput"
   }
 }
