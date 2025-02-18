@@ -23,3 +23,5 @@ query = df \
 
 #Hoping for the best
 query.awaitTermination()
+
+spark.stop()
