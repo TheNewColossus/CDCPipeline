@@ -20,14 +20,18 @@ else
     sudo mkdir -p ${WORK_DIR}/kafka/data
     sudo mkdir -p ${WORK_DIR}/spark/data
     sudo mkdir -p ${WORK_DIR}/spark/apps
+    sudo mkdir -p ${WORK_DIR}/es_data/data
+    sudo mkdir -p ${WORK_DIR}/kibana_data/data
 
     #granting permission to them
-    sudo chmod 755 ${WORK_DIR}/pgsql
-    sudo chmod 755 ${WORK_DIR}/kafka
-    sudo chmod 755 ${WORK_DIR}/kafka/storage
-    sudo chmod 755 ${WORK_DIR}/kafka/data
-    sudo chmod 755 ${WORK_DIR}/spark/data
-    sudo chmod 755 ${WORK_DIR}/spark/apps
+    sudo chmod 777 ${WORK_DIR}/pgsql
+    sudo chmod -R 777  ${WORK_DIR}/kafka
+    sudo chmod -R 777  ${WORK_DIR}/spark/data
+    sudo chmod -R 777 ${WORK_DIR}/es_data
+    sudo chmod -R 777 ${WORK_DIR}/kibana_data
+
+    #moving kibana.yml to kibana_data
+    sudo mv ${WORK_DIR}/kibana.yml ${WORK_DIR}/kibana_data
 fi
 
 #starting the container cluster
