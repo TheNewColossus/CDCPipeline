@@ -180,8 +180,8 @@ services:
       - ./es_data/data:/usr/share/elasticsearch/data
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false
-      - xpack.monitoring.enabled=false
+      - xpack.security.enabled=true
+      - xpack.monitoring.enabled=true
       - cluster.name=elasticsearch
       - ELASTIC_USER=${ELASTIC_USER}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
