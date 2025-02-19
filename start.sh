@@ -42,4 +42,5 @@ echo "Waiting for \"1 minute\" so that the cluster could be up and running\n\n"
 sleep 60
 
 #submitting the connector
-curl -X POST -H "Content-Type: application/json" --data @debezium-pgsql.json http://localhost:8083/connectors
+curl -X POST -H "Content-Type: application/json" --data @connectors/debezium-pgsql.json http://localhost:8083/connectors
+curl -X POST -H "Content-Type: application/json" --data @connectors/confluent-elasticsearch.json http://localhost:8083/connectors
