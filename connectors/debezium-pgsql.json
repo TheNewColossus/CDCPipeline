@@ -1,0 +1,17 @@
+{
+  "name": "postgres-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "akuma",
+    "database.password": "daedra",
+    "database.dbname" : "akuma",
+    "table.include.list": "public.students",
+    "database.history.kafka.topic": "schema-changes.students",
+    "database.history.kafka.bootstrap.servers": "broker:29092",
+    "topic.prefix": "change_captured",
+    "plugin.name": "pgoutput"
+  }
+}

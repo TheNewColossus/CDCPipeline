@@ -1,0 +1,20 @@
+{
+  "name": "elasticsearch-connector",
+  "config": {
+    "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+    "connection.url": "http://elasticsearch:9200",
+    "tasks.max": "1",
+    "connection.username": "elastic",
+    "connection.password": "aedra",
+    "bootstrap.servers": "broker:29092",
+    "topics": "change_captured.public.students",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": false,
+    "value.converter.schemas.enable": false,
+    "key.ignore": "true",
+    "behavior.on.null.values": "IGNORE",
+    "offset.storage.file.filename": "/tmp/connect.offsets",
+    "offset.flush.interval.ms": 10000
+  }
+}
