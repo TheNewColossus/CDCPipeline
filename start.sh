@@ -22,6 +22,8 @@ else
     sudo mkdir -p ${WORK_DIR}/spark/apps
     sudo mkdir -p ${WORK_DIR}/es_data/data
     sudo mkdir -p ${WORK_DIR}/kibana_data/data
+    sudo mkdir -p ${WORK_DIR}/logstash_data/data
+    sudo mkdir -p ${WORK_DIR}/logstash_data/ingest_data
 
     #granting permission to them
     sudo chmod 777 ${WORK_DIR}/pgsql
@@ -29,9 +31,13 @@ else
     sudo chmod -R 777  ${WORK_DIR}/spark/data
     sudo chmod -R 777 ${WORK_DIR}/es_data
     sudo chmod -R 777 ${WORK_DIR}/kibana_data
+    sudo chmod -R 777 ${WORK_DIR}/logstash_data/data
+    sudo chmod -R 777 ${WORK_DIR}/logstash_data/ingest_data
 
     #moving kibana.yml to kibana_data
     sudo mv ${WORK_DIR}/kibana.yml ${WORK_DIR}/kibana_data
+    #moving logstash.yml to logstash_data
+    sudo mv ${WORK_DIR}/logstash.conf ${WORK_DIR}/logstash_data
 fi
 
 #starting the container cluster
