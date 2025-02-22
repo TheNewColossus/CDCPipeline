@@ -34,11 +34,6 @@ volumes:
       type: none
       o: bind
       device: ${WORKDIR}/kibana_data
-  logstash_data:
-    driver_opts:
-      type: none
-      o: bind
-      device: ${WORKDIR}/logstash_data
 
 services:
   postgres:
@@ -124,8 +119,7 @@ services:
       - "8888:8888"
     depends_on:
       - kafka-connect
-    command: >
-      sh -c "/opt/spark/bin/spark-class org.apache.spark.deploy.master.Master --host spark-master &"
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master", "--host", "spark-master"]
     volumes:
       - spark_apps_storage:/opt/spark-apps
       - spark_data_storage:/opt/spark-data
@@ -201,20 +195,3 @@ services:
     depends_on:
       - elasticsearch
   
-  logstash:
-    image: logstash:7.9.1
-    volumes:
-      - ./logstash_data/data:/usr/share/logstash/data
-      - ./logstash_data/ingest_data:/usr/share/logstash/ingest_data
-      - ./logstash_data/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    ports:
-      - "9600:9600"
-    environment:
-      - xpack.monitoring.enabled=true
-      - ELASTIC_USER=elastic
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - ELASTIC_HOSTS=https://elasticsearch:9200
-    depends_on:
-      - elasticsearch
-      - kibana
-      
