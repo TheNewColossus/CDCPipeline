@@ -11,7 +11,7 @@ df = spark \
   .option("kafka.bootstrap.servers", "broker:29092") \
   .option("subscribe", "change_captured.public.students") \
   .load()
-df = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+df = df.selectExpr("CAST(value AS STRING)")
 
 #Writing the stream in order to read it, it is a bit silly but a procedure that needs to be followed
 query = df \
