@@ -18,7 +18,7 @@ query = df \
     .writeStream \
     .outputMode("append") \
     .format("console") \
-    .queryName("blah") \
+    .queryName("stream_query") \
     .start()
 
 #Hoping for the best

@@ -1,14 +1,4 @@
 volumes:
-  kafka_storage:
-    driver_opts:
-      type: none
-      o: bind
-      device: ${WORKDIR}/kafka/data
-  file_storage:
-    driver_opts:
-      type: none
-      o: bind
-      device: ${WORKDIR}/kafka/storage
   metadata_storage:
     driver_opts:
       type: none
@@ -66,9 +56,6 @@ services:
     ports:
       - "9092:9092"
       - "9101:9101"
-    volumes:
-      - kafka_storage:/var/lib/kafka/data
-      - file_storage:/var/lib/kafka/
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
@@ -133,6 +120,7 @@ services:
     ports:
       - "9094:8080"
       - "7000:7000"
+    restart: always
     depends_on:
       - spark-master
     command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
@@ -154,6 +142,7 @@ services:
     ports:
       - "9095:8080"
       - "7001:7000"
+    restart: always
     depends_on:
       - spark-master
     command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "spark://spark-master:7077"]
