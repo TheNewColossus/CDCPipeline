@@ -11,23 +11,29 @@ else
     sed -i "2iWORKDIR=$WORK_DIR" ${WORK_DIR}/.env
     
     #building the docker image to install the connector-plugin
-    sudo docker buildx build -t confluentinc/cp-pgsql-server-connect:7.3.2 --target kafka_server .
-    sudo docker buildx build -t spark-modified:3.5.4 --target spark .
+    #sudo docker buildx build -t confluentinc/cp-pgsql-server-connect:7.3.2 --target kafka_server .
+    #sudo docker buildx build -t spark-modified:3.5.4 --target spark .
     
     #creating the directories for storage
     sudo mkdir ${WORK_DIR}/pgsql
+    sudo mkdir -p ${WORK_DIR}/kafka/data
+    sudo mkdir -p ${WORK_DIR}/kafka/storage
     sudo mkdir -p ${WORK_DIR}/es_data/data
     sudo mkdir -p ${WORK_DIR}/kibana_data/data
+    sudo mkdir -p ${WORK_DIR}/spark/data
+    sudo mkdir -p ${WORK_DIR}/spark/apps
     
 
     #granting permission to them
-    sudo chmod 777 ${WORK_DIR}/pgsql
+    sudo chmod 755 ${WORK_DIR}/pgsql
+    sudo chmod -R 755 ${WORK_DIR}/kafka
+    sudo chmod -R 755 ${WORK_DIR}/spark
     sudo chmod -R 777 ${WORK_DIR}/es_data
     sudo chmod -R 777 ${WORK_DIR}/kibana_data
     
 
     #moving kibana.yml to kibana_data
-    [ -f "${WORK_DIR}/kibana.yml" ] && sudo mv "${WORK_DIR}/kibana.yml" "${WORK_DIR}/kibana_data/"
+    sudo cp "${WORK_DIR}/kibana.yml" "${WORK_DIR}/kibana_data/"
 fi
 
 #starting the container cluster

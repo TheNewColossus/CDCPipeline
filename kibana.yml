@@ -1,4 +1,3 @@
-
 # To allow connections from remote users, set this parameter to a non-loopback address.
 server.host: "0.0.0.0"
 
