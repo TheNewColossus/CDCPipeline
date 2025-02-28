@@ -9,7 +9,7 @@ A pipeline to capture database changes and store it in Elasticsearch.
 ### <ul> <li> [Contact](#contact) </ul>
 
 ### Architecture Diagram
-![](./images/Screenshot%20From%202025-01-02%2017-04-35.png)
+![](./images/diagram.png)
 
 ### How it Works
 Make sure to read the **readme.txt** file first, as it contains all the information regarding connectors and ports.
